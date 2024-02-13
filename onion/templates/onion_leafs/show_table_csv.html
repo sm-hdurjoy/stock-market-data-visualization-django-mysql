@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Data Table From CSV File</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
+    />
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
+    ></script>
+    <style>
+      th {
+        background: #117c7d;
+      }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $("#csvDataTable").DataTable();
+      });
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get the dropdown element
+        const dropdown = document.getElementById("dropdown");
+
+        // Retrieve the selected value from local storage
+        const selectedValueCSV = localStorage.getItem("selectedValueCSV");
+        if (selectedValueCSV) {
+          // Set the selected option in the dropdown
+          dropdown.value = selectedValueCSV;
+        }
+
+        // Add an event listener for the change event
+        dropdown.addEventListener("change", function () {
+          // Get the selected value
+          const selectedValueCSV = this.value;
+
+          // Store the selected value in local storage
+          localStorage.setItem("selectedValueCSV", selectedValueCSV);
+
+          // Construct the URL based on the selected value
+          const url = '{% url 'from_csv_file' %}';
+          const newUrl = url + "?trade=" + selectedValueCSV;
+          console.log(newUrl);
+
+          // Redirect to the new URL
+          window.location.href = newUrl;
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Showing Table & Graph From CSV File</h1>
+    <select id="dropdown">
+      {% for n in title %}
+      <option value="{{n.trade_code}}">{{n.trade_code}}</option>
+      {% endfor %}
+    </select>
+    {% include 'onion_leafs/plot_csv.html' %}
+    <table id="csvDataTable" class="display">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Trade Code</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>Open</th>
+          <th>Close</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row.date }}</td>
+          <td>{{ row.trade_code }}</td>
+          <td>{{ row.high }}</td>
+          <td>{{ row.low }}</td>
+          <td>{{ row.open }}</td>
+          <td>{{ row.close }}</td>
+          <td>{{ row.volume }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
