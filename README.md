@@ -47,8 +47,8 @@ This repository contains a web application for visualizing stock market data. Bu
    ```
 
 5. Set up MySQL database:
-- Create a new MySQL database
-- Update the `DATABASES` settings in `settings.py` with your MySQL configuration
+   - Create a new MySQL database
+   - Update the `DATABASES` settings in `settings.py` with your MySQL configuration
 
 6. Apply database migrations:
    ```bash
